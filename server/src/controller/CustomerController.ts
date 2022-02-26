@@ -19,8 +19,9 @@ export class CustomerController {
     }
 
     async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.customerRepository.findOne(request.params.id);
-        await this.customerRepository.remove(userToRemove);
+        const customerToRemove = await this.customerRepository.findOne(request.params.id);
+        if(!customerToRemove) throw Error('Customer does not exist');
+        await this.customerRepository.remove(customerToRemove);
     }
 
 }

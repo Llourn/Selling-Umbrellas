@@ -230,6 +230,7 @@ const MyForm = withFormik<MyFormProps, FormValues>({
     const fullCustomerData = {
       name: values.name,
       location: values.location,
+      phoneNumber: values.phoneNumber,
       personOfContact: values.personOfContact,
       numberOfEmployees: values.numberOfEmployees,
       lat: values.lat,
@@ -237,15 +238,15 @@ const MyForm = withFormik<MyFormProps, FormValues>({
     };
 
     console.log("LOG DATA");
-    console.log(fullCustomerData);
+    console.log(JSON.stringify(fullCustomerData));
 
     fetch("http://localhost:5000/customers", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(fullCustomerData),
-    }).then(() => {
-      console.log("New Customer Added");
-    });
+    }).then((res) => {
+      console.log(res);
+    })
   },
 })(InnerForm);
 

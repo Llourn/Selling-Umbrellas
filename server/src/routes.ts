@@ -1,23 +1,45 @@
-import {CustomerController} from "./controller/UserController";
+import { body, param } from "express-validator";
+import { CustomerController } from "./controller/CustomerController";
 
-export const Routes = [{
+export const Routes = [
+  {
     method: "get",
     route: "/customers",
     controller: CustomerController,
-    action: "all"
-}, {
+    action: "all",
+    validation: [],
+  },
+  {
     method: "get",
     route: "/customers/:id",
     controller: CustomerController,
-    action: "one"
-}, {
+    action: "one",
+    validation: [param("id").isInt()],
+  },
+  {
     method: "post",
     route: "/customers",
     controller: CustomerController,
-    action: "save"
-}, {
+    action: "save",
+    validation: [
+      body("name").isString(),
+      body("personOfContact").isString(),
+      body("phoneNumber").isString(),
+      body("location").isString(),
+      body("lat").isDecimal(),
+      body("lon").isDecimal(),
+      body("numberOfEmployees")
+        .isInt({ min: 1 })
+        .withMessage(
+          "Number of employees must be an integer with a value greater than 0."
+        ),
+    ],
+  },
+  {
     method: "delete",
     route: "/customers/:id",
     controller: CustomerController,
-    action: "remove"
-}];
+    action: "remove",
+    validation: [param("id").isInt()],
+  },
+];
