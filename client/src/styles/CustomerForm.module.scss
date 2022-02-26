@@ -1,0 +1,44 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.fieldWrapper {
+  background: lightgrey;
+  border: 1px solid grey;
+  border-radius: 3px;
+  min-width: 400px;
+  padding: 0.5rem 0.75rem;
+}
+
+.fieldContainer {
+  display: flex;
+  justify-content: space-between;
+}
+.error {
+  color: rgb(136, 0, 0);
+  text-align: right;
+}
+
+.button {
+  max-width: 500px;
+}
+
+.buttonContainer {
+  text-align: right;
+}
+
+.locationContainer {
+
+}
+
+.location {
+  p {
+    cursor: pointer;
+  }
+  p:hover {
+    color: red;
+  }
+}

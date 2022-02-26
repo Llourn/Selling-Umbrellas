@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+.customerContainer {
+  background-color: lightgrey;
+  border: 1px solid grey;
+  border-radius: 3px;
+  padding: 0.5rem 0.75rem;
+  h3 {
+    margin-top: 0;
+  }
+}

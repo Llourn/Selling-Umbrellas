@@ -1,6 +1,6 @@
 {
    "type": "postgres",
-   "host": "pg_container",
+   "host": "pgContainer",
    "port": 5432,
    "username": "root",
    "password": "root",
