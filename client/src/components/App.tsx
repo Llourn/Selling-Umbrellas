@@ -12,7 +12,7 @@ function App() {
       <h4 className={styles.title}>We keep you dry!</h4>
       <Navigation />
       <Routes>
-        <Route path="/" element={<h2>Welcome to the Umbrella App.</h2>} />
+        <Route path="/" element={<h2 style={{"textAlign":"center"}}>Welcome to Fake Umbrella!</h2>} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/customers/:id" element={<CustomerForm />} />
         <Route path="/newcustomer" element={<CustomerForm />} />
