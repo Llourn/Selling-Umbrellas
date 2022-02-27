@@ -59,17 +59,22 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
 
   const locationResults = () => {
     return locations?.map((location, index) => {
-      const locationName = `${location.name}, ${location.state} ${location.country}`;
+      const locationName = `${location.name || ""}, ${location.state || ""} ${
+        location.country || ""
+      }`
+        .replace(/\s+/g, " ")
+        .trim();
       return (
         <div key={index} className={styles.location}>
           <p
+            className={styles.locationSelect}
             onClick={() => {
               saveLocationData(locationName, location.lat, location.lon);
               values.location = locationName;
               setLocations(null);
             }}
           >
-            {location.name}, {location.state} {location.country}
+            ► {location.name}, {location.state} {location.country}
           </p>
         </div>
       );
@@ -250,7 +255,7 @@ const MyForm = withFormik<MyFormProps, FormValues>({
         body: JSON.stringify(fullCustomerData),
       }).then((res) => {
         console.log(res);
-        if(values.nav) values.nav("/customers");
+        if (values.nav) values.nav("/customers");
       });
     } else {
       fetch(`http://localhost:5000/customers/${values.id}`, {
@@ -259,7 +264,7 @@ const MyForm = withFormik<MyFormProps, FormValues>({
         body: JSON.stringify(fullCustomerData),
       }).then((res) => {
         console.log(res);
-        if(values.nav) values.nav("/customers");
+        if (values.nav) values.nav("/customers");
       });
     }
   },
@@ -288,12 +293,7 @@ const CustomerForm = () => {
     }
   }, [id]);
 
-  return (
-    <div>
-      <h1>Customer Information</h1>
-      {checked && <MyForm customer={customer} />}
-    </div>
-  );
+  return <div>{checked && <MyForm customer={customer} />}</div>;
 };
 
 export default CustomerForm;

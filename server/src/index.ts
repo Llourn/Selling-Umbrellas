@@ -54,30 +54,6 @@ createConnection()
     // start express server
     app.listen(port);
 
-    // insert new users for test
-    // await connection.manager.save(
-    //   connection.manager.create(Customer, {
-    //     name: "Bell",
-    //     personOfContact: "Charles Switch",
-    //     phoneNumber: "506-345-0192",
-    //     location: "Fredericton NB",
-    //     lat: 45,
-    //     lon: -66,
-    //     numberOfEmployees: 4245,
-    //   })
-    // );
-    // await connection.manager.save(
-    //   connection.manager.create(Customer, {
-    //     name: "Sobeys",
-    //     personOfContact: "Jo Burdundy",
-    //     phoneNumber: "506-456-0221",
-    //     location: "Fredericton NB",
-    //     lat: 45,
-    //     lon: -66,
-    //     numberOfEmployees: 459,
-    //   })
-    // );
-
     console.log(`Express server has started on port ${port}.`);
   })
   .catch((error) => console.log(error));

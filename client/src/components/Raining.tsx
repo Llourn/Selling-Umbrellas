@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { WEATHER_API_KEY } from "../config";
 import { Customer } from "../types";
+import styles from "../styles/Raining.module.scss";
 
 type Coords = {
   lat: number;
@@ -46,8 +47,6 @@ const Raining = () => {
     let rainCoordsAndDates: RainData[] = [];
     Promise.all(urls.map((url) => fetch(url).then((res) => res.json()))).then(
       (values) => {
-        console.log("outside", values);
-
         values.forEach((data, index) => {
           let rainData: RainData;
 
@@ -99,28 +98,65 @@ const Raining = () => {
     return raining?.map((target) => {
       return target.companies.map((tar, index) => {
         let customer = customers?.find((cust) => cust.id === tar);
-
+        generateTimeDetails(target.times);
         return (
-          <div key={index}>
-            <p>Customer: {customer?.name}</p>
-            <p>Person of Contact: {customer?.personOfContact}</p>
-            <p>Phone: {customer?.phoneNumber}</p>
-            <div>
-              {target.times.map((time, index) => (
-                <p key={index}>{time}</p>
-              ))}
+          <div key={index} className={styles.card}>
+            <div className={styles.customerDetails}>
+              <p><span>Customer:</span> {customer?.name}</p>
+              <p><span>Person of Contact:</span> {customer?.personOfContact}</p>
+              <p><span>Phone:</span> {customer?.phoneNumber}</p>
             </div>
+            {generateTimeDetails(target.times)}
           </div>
         );
       });
     });
   };
 
+  const generateTimeDetails = (times: string[]) => {
+    let days: string[] = [];
+    let dayAndTimes: { day: string; times: string[] }[] = [];
+
+    for (let i = 0; i < times.length; i++) {
+      const time = times[i];
+      let day = time.slice(0, time.indexOf(" "));
+      if (!days.includes(day)) days.push(day);
+    }
+
+    days.forEach((day) => {
+      let dayTime: { day: string; times: string[] } = { day: day, times: [] };
+
+      times.forEach((time) => {
+        let timeString = time.slice(time.indexOf(" "));
+        if (time.includes(day) && timeString) dayTime.times.push(timeString);
+      });
+
+      dayAndTimes.push(dayTime);
+    });
+
+    return (
+      <div className={styles.daysAndTimes}>
+        {dayAndTimes.map((day) => {
+          return (
+            <div>
+            <details>
+              <summary>{day.day}</summary>
+              {day.times.map((time) => {
+                return <p>{time}</p>;
+              })}
+            </details>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   useEffect(() => {
     getCustomers();
   }, []);
 
-  return <div>{targets()}</div>;
+  return <div className={styles.main}>{targets()}</div>;
 };
 
 export default Raining;

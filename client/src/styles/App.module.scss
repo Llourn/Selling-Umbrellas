@@ -1,13 +1,28 @@
+@use './modules/colors';
+@import url('https://fonts.googleapis.com/css2?family=Twinkle+Star&display=swap');
+
 .main {
-  background-color: whitesmoke;
+  background-color: colors.$white;
   min-height: 100vh;
   max-width: min(100% - 2rem, 900px);
   margin: auto;
-}
-
-.title {
-  text-align: center;
-  margin-top: 0;
   padding: 1rem;
 }
 
+.title {
+  font-family: 'Twinkle Star', cursive;
+  text-align: center;
+  margin: 0;
+  // padding: 1rem;
+  a {
+    text-decoration: none;
+    &:hover {
+      color: colors.$secondary;
+    }
+  }
+  
+}
+
+h1 {
+
+}

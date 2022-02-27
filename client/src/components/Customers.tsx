@@ -29,7 +29,7 @@ const Customers = (props: Props) => {
           const error = (data && data.message) || res.status;
           return Promise.reject(error);
         }
-        console.log("Customer deleted successfully.")
+        console.log("Customer deleted successfully.");
         getData();
       })
       .catch((error) => {
@@ -41,19 +41,27 @@ const Customers = (props: Props) => {
     return customers?.map((customer) => {
       return (
         <div className={styles.customerContainer} key={customer.id}>
-          <h3>
-            {customer.name} (id# {customer.id})
-          </h3>
-          <p>Location: {customer.location}</p>
-          <p>Number of Employees: {customer.numberOfEmployees}</p>
-          <p>Person of Contact: {customer.personOfContact}</p>
-          <p>Phone: {customer.phoneNumber}</p>
-          <Link to={`/customers/${customer.id}`}>
-            <button>EDIT</button>
-          </Link>
-          <button onClick={() => handleCustomerDelete(customer.id)}>
-            DELETE
-          </button>
+          <div className={styles.header}>
+            <h3>
+              {customer.name} (id# {customer.id})
+            </h3>
+          </div>
+          <div className={styles.body}>
+            <div className={styles.dataContainer}>
+              <p><span>Location:</span> {customer.location}</p>
+              <p><span>Number of Employees:</span> {customer.numberOfEmployees}</p>
+              <p><span>Person of Contact:</span> {customer.personOfContact}</p>
+              <p><span>Phone:</span> {customer.phoneNumber}</p>
+            </div>
+            <div className={styles.buttonContainer}>
+              <Link to={`/customers/${customer.id}`}>
+                <button>EDIT</button>
+              </Link>
+              <button onClick={() => handleCustomerDelete(customer.id)}>
+                DELETE
+              </button>
+            </div>
+          </div>
         </div>
       );
     });
@@ -61,11 +69,7 @@ const Customers = (props: Props) => {
 
   return (
     <div className={styles.container}>
-      {customers ? (
-        customerList()
-      ) : (
-        <div>u got no customors. do better biznis.</div>
-      )}
+      {customers ? customerList() : <div>Loading...</div>}
     </div>
   );
 };

@@ -1,0 +1,61 @@
+@use "./modules/colors";
+
+.main {
+  * {
+    margin-bottom: 1rem;
+  }
+}
+
+.card {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  background-color: whitesmoke;
+  border-radius: 3px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px,
+    rgba(0, 0, 0, 0.22) 0px 10px 10px;
+}
+
+.daysAndTimes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+
+  details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+    p {
+      margin-block: .35rem;
+    }
+  }
+
+  summary {
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+    
+  }
+
+  details[open] {
+    padding: 0.5em;
+  }
+
+  details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+  }
+}
+
+.customerDetails {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  span {
+    color: colors.$splash;
+  }
+  p {
+    margin: 0;
+  }
+}

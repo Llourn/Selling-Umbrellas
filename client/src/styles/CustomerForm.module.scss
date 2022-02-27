@@ -1,3 +1,5 @@
+@use './modules/colors';
+
 .container {
   display: flex;
   flex-direction: column;
@@ -6,19 +8,25 @@
 }
 
 .fieldWrapper {
-  background: lightgrey;
-  border: 1px solid grey;
+  background: colors.$white;
+  border: 1px solid colors.$white;
   border-radius: 3px;
-  min-width: 400px;
-  padding: 0.5rem 0.75rem;
+  min-width: min(400px, 100% - 1rem);
+  padding: 1rem;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+  
 }
 
 .fieldContainer {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
+  input {
+    width: 100%;
+  }
 }
 .error {
-  color: rgb(136, 0, 0);
+  color: colors.$splash;
   text-align: right;
 }
 
@@ -28,17 +36,13 @@
 
 .buttonContainer {
   text-align: right;
+  padding-top: 1rem;
 }
 
-.locationContainer {
-
-}
-
-.location {
-  p {
-    cursor: pointer;
-  }
-  p:hover {
-    color: red;
+.locationSelect {
+  cursor: pointer;
+  color: colors.$secondary;
+  &:hover {
+    color: colors.$primary;
   }
 }

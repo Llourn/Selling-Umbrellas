@@ -1,15 +1,46 @@
+@use './modules/colors';
 @import url("https://fonts.googleapis.com/css2?family=Noto+Sans+JP&display=swap");
+
+* {
+  box-sizing: border-box;
+}
 
 body {
   margin: 0;
   padding: 0;
   font-family: "Noto Sans JP", sans-serif;
-  background-color: pink;
+  background: colors.$primary;
 }
 
 input {
   font-size: 1rem;
   padding: 0.35rem;
   border-radius: 3px;
-  border: none;
+  border: 1px solid colors.$primary;
+}
+
+a {
+  color: colors.$secondary;
+  text-decoration: none;
+  &:hover {
+    color: colors.$primary;
+  }
+  &:active {
+    color: colors.$primary;
+  }
+}
+
+button {
+  cursor: pointer;
+  padding: .5rem .7rem;
+  color: colors.$white;
+  background-color: colors.$secondary;
+  border: 1px solid colors.$secondary;
+  border-radius: 3px;
+  transition: background-color .08s linear, color .08s linear;
+  margin-left: .5rem;
+  &:hover {
+    background-color: colors.$primary;
+    color: colors.$secondary;
+  }
 }

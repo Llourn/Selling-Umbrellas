@@ -7,8 +7,20 @@ export class CustomerController {
 
   async all(request: Request, response: Response, next: NextFunction) {
     let allCustomers = await this.customerRepository.find();
-    allCustomers.sort(compare);
+    allCustomers.sort(compareId);
     return allCustomers;
+  }
+
+  async topFour(request: Request, response: Response, next: NextFunction) {
+    let allCustomers = await this.customerRepository.find();
+    allCustomers.sort(compareEmployeeCount);
+    let firstFour: Customer[];
+    if(allCustomers.length > 4) {
+      firstFour = allCustomers.slice(0, 4);
+    } else {
+      firstFour = allCustomers;
+    }
+    return firstFour;
   }
 
   async one(request: Request, response: Response, next: NextFunction) {
@@ -31,11 +43,21 @@ export class CustomerController {
 }
 
 // sort by id in descending order.
-function compare(a: Customer, b: Customer) {
+function compareId(a: Customer, b: Customer) {
   if (a.id > b.id) {
     return -1;
   }
   if (a.id < b.id) {
+    return 1;
+  }
+  return 0;
+}
+
+function compareEmployeeCount(a: Customer, b: Customer) {
+  if (a.numberOfEmployees > b.numberOfEmployees) {
+    return -1;
+  }
+  if (a.numberOfEmployees < b.numberOfEmployees) {
     return 1;
   }
   return 0;

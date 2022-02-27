@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styles from "../styles/Navigation.module.scss";
 
 type Props = {};
@@ -9,13 +9,16 @@ const Navigation = (props: Props) => {
     <nav>
       <ul className={styles.navList}>
         <li>
-          <Link to="/customers">Customers</Link>
+          <NavLink className={(navData) => navData.isActive ? styles.activeLink : ""} to="/customers">Customers</NavLink>
         </li>
         <li>
-          <Link to="/raining">Raining</Link>
+          <NavLink className={(navData) => navData.isActive ? styles.activeLink : ""} to="/newcustomer">New Customer</NavLink>
         </li>
         <li>
-          <Link to="/newcustomer">New Customer</Link>
+          <NavLink className={(navData) => navData.isActive ? styles.activeLink : ""} to="/raining">Raining</NavLink>
+        </li>
+        <li>
+          <NavLink className={(navData) => navData.isActive ? styles.activeLink : ""} to="/topfour">Top 4</NavLink>
         </li>
       </ul>
     </nav>

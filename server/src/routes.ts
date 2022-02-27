@@ -4,6 +4,13 @@ import { CustomerController } from "./controller/CustomerController";
 export const Routes = [
   {
     method: "get",
+    route: "/topfour",
+    controller: CustomerController,
+    action: "topFour",
+    validation: [],
+  },
+  {
+    method: "get",
     route: "/customers",
     controller: CustomerController,
     action: "all",
