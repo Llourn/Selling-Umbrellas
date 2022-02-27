@@ -1,9 +1,9 @@
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import Customers from "./Customers";
-import Weather from "./Weather";
 import styles from "../styles/App.module.scss";
 import Navigation from "./Navigation";
 import CustomerForm from "./CustomerForm";
+import Raining from "./Raining";
 function App() {
   return (
     <div className={styles.main}>
@@ -13,8 +13,8 @@ function App() {
         <Route path="/" element={<h2>Welcome to the Umbrella App.</h2>} />
         <Route path="/customers" element={<Customers />} />
         <Route path="/customers/:id" element={<CustomerForm />} />
-        <Route path="/weather" element={<Weather />} />
         <Route path="/newcustomer" element={<CustomerForm />} />
+        <Route path="/raining" element={<Raining />} />
       </Routes>
     </div>
   );

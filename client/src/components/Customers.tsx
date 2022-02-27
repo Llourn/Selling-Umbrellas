@@ -18,6 +18,25 @@ const Customers = (props: Props) => {
     getData();
   }, []);
 
+  const handleCustomerDelete = (id: number) => {
+    fetch(`http://localhost:5000/customers/${id}`, {
+      method: "DELETE",
+    })
+      .then(async (res) => {
+        console.log(res);
+        let data = await res.json();
+        if (!res.ok) {
+          const error = (data && data.message) || res.status;
+          return Promise.reject(error);
+        }
+        console.log("Customer deleted successfully.")
+        getData();
+      })
+      .catch((error) => {
+        console.error("Error deleting customer: ", error);
+      });
+  };
+
   const customerList = () => {
     return customers?.map((customer) => {
       return (
@@ -29,7 +48,12 @@ const Customers = (props: Props) => {
           <p>Number of Employees: {customer.numberOfEmployees}</p>
           <p>Person of Contact: {customer.personOfContact}</p>
           <p>Phone: {customer.phoneNumber}</p>
-          <Link to={`/customers/${customer.id}`}>EDIT</Link>
+          <Link to={`/customers/${customer.id}`}>
+            <button>EDIT</button>
+          </Link>
+          <button onClick={() => handleCustomerDelete(customer.id)}>
+            DELETE
+          </button>
         </div>
       );
     });

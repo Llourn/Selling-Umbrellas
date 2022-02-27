@@ -12,7 +12,7 @@ const Navigation = (props: Props) => {
           <Link to="/customers">Customers</Link>
         </li>
         <li>
-          <Link to="/weather">Weather</Link>
+          <Link to="/raining">Raining</Link>
         </li>
         <li>
           <Link to="/newcustomer">New Customer</Link>

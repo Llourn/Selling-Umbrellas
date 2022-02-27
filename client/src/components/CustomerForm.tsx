@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { withFormik, FormikProps, FormikErrors, Form, Field } from "formik";
 import styles from "../styles/CustomerForm.module.scss";
-import { useParams } from "react-router-dom";
+import { NavigateFunction, useNavigate, useParams } from "react-router-dom";
 import { Customer, Location } from "../types";
 import { WEATHER_API_KEY } from "../config";
 
 // Shape of form values
 interface FormValues {
+  id: number;
   name: string;
   personOfContact: string;
   phoneNumber: string;
@@ -14,23 +15,21 @@ interface FormValues {
   numberOfEmployees: number;
   lat: number;
   lon: number;
+  nav: NavigateFunction | null;
 }
 
 interface OtherProps {
   customer: Customer | null;
 }
 
-type Coords = {
-  lat: number;
-  lon: number;
-};
-
 // Aside: You may see InjectedFormikProps<OtherProps, FormValues> instead of what comes below in older code.. InjectedFormikProps was artifact of when Formik only exported a HoC. It is also less flexible as it MUST wrap all props (it passes them through).
 const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
   const { touched, errors, isSubmitting, resetForm, customer, values } = props;
 
+  values.nav = useNavigate();
+
+  values.id = customer ? customer.id : -1;
   const [locations, setLocations] = useState<Location[] | null>(null);
-  const [coords, setCoords] = useState<Coords>({ lat: 0, lon: 0 });
 
   const saveLocationData = (locationName: string, lat: number, lon: number) => {
     values.location = locationName;
@@ -39,11 +38,9 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
   };
 
   const getLocations = async (location: string) => {
-    console.log(process.env.OPEN_WEATHER_API_KEY);
     const url = `http://api.openweathermap.org/geo/1.0/direct?q=${location}&limit=5&appid=${WEATHER_API_KEY}`;
     const response = await fetch(url);
     const data = await response.json();
-    console.log(data);
     //@ts-ignore
     let collection: [Location] = [];
     for (let i = 0; i < data.length; i++) {
@@ -57,17 +54,19 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
       };
       collection.push(newLocation);
     }
-    console.log(collection);
     setLocations(collection);
   };
 
   const locationResults = () => {
     return locations?.map((location, index) => {
+      const locationName = `${location.name}, ${location.state} ${location.country}`;
       return (
         <div key={index} className={styles.location}>
           <p
             onClick={() => {
-              saveLocationData(location.name, location.lat, location.lon);
+              saveLocationData(locationName, location.lat, location.lon);
+              values.location = locationName;
+              setLocations(null);
             }}
           >
             {location.name}, {location.state} {location.country}
@@ -85,6 +84,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
     if (!customer) {
       resetForm({
         values: {
+          id: -1,
           name: "",
           personOfContact: "",
           phoneNumber: "",
@@ -92,6 +92,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
           numberOfEmployees: 1,
           lat: 0,
           lon: 0,
+          nav: null,
         },
       });
     }
@@ -131,11 +132,15 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
             <button
               onClick={handleLookUp}
               className={styles.button}
+              disabled={values.location.length <= 0}
               type="button"
             >
               Lookup
             </button>
-            <div className={styles.locationContainer}>{locationResults()}</div>
+            <div className={styles.locationContainer}>
+              {locations && <p>Please select one of the options below.</p>}
+              {locationResults()}
+            </div>
           </div>
         )}
       </div>
@@ -171,7 +176,7 @@ const InnerForm = (props: OtherProps & FormikProps<FormValues>) => {
       </div>
 
       <button className={styles.button} type="submit" disabled={isSubmitting}>
-        Submit
+        {customer ? "Update customer" : "Create new customer"}
       </button>
     </Form>
   );
@@ -187,6 +192,7 @@ const MyForm = withFormik<MyFormProps, FormValues>({
   // Transform outer props into form values
   mapPropsToValues: ({ customer }) => {
     return {
+      id: customer?.id || -1,
       name: customer?.name || "",
       personOfContact: customer?.personOfContact || "",
       phoneNumber: customer?.phoneNumber || "",
@@ -194,6 +200,7 @@ const MyForm = withFormik<MyFormProps, FormValues>({
       numberOfEmployees: customer?.numberOfEmployees || 1,
       lat: customer?.lat || 0,
       lon: customer?.lon || 0,
+      nav: null,
     };
   },
 
@@ -226,8 +233,8 @@ const MyForm = withFormik<MyFormProps, FormValues>({
   },
 
   handleSubmit: (values) => {
-    // do submitting things
     const fullCustomerData = {
+      id: values.id,
       name: values.name,
       location: values.location,
       phoneNumber: values.phoneNumber,
@@ -236,17 +243,25 @@ const MyForm = withFormik<MyFormProps, FormValues>({
       lat: values.lat,
       lon: values.lon,
     };
-
-    console.log("LOG DATA");
-    console.log(JSON.stringify(fullCustomerData));
-
-    fetch("http://localhost:5000/customers", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(fullCustomerData),
-    }).then((res) => {
-      console.log(res);
-    })
+    if (values.id < 0) {
+      fetch("http://localhost:5000/customers", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fullCustomerData),
+      }).then((res) => {
+        console.log(res);
+        if(values.nav) values.nav("/customers");
+      });
+    } else {
+      fetch(`http://localhost:5000/customers/${values.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(fullCustomerData),
+      }).then((res) => {
+        console.log(res);
+        if(values.nav) values.nav("/customers");
+      });
+    }
   },
 })(InnerForm);
 
